@@ -2,7 +2,7 @@ Name: Kobowi.Pushover
 AntiForgery: enabled
 Author: kobowi
 Website: http://www.kobowi.co.uk
-Version: 1.0
+Version: 0.1
 OrchardVersion: 1.4.0
 Description: Enables sending of Pushover notifications form an Orchard site.
 Features:
