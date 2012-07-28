@@ -1,0 +1,5 @@
+﻿<Placement>
+  <Match ContentType="Site">
+    <Place Parts_PushoverSettingsPart_Edit="Content:25"/>
+  </Match>
+</Placement>

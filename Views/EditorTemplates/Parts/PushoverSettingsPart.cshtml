@@ -1,0 +1,7 @@
+﻿@model Kobowi.Pushover.Models.PushoverSettingsPart
+<fieldset>
+    <legend>@T("Pushover Settings")</legend>
+    @Html.LabelFor(m => m.ApiKey, T("API Key"))
+    @Html.TextBoxFor(m => m.ApiKey)
+    <span class="hint">@T("Your pushover API key. You can create a new API key ") <a href="https://pushover.net/apps/build">@T("here")</a>.</span>
+</fieldset>
