@@ -34,14 +34,31 @@ namespace Kobowi.Pushover.Rules
         #endregion
 
         private bool Push(ActionContext context) {
-            var message = new PushoverMessageBase {
-                User = _tokenizer.Replace(context.Properties["PushoverUser"], context.Tokens),
-                Title = _tokenizer.Replace(context.Properties["MessageTitle"], context.Tokens),
-                Message = _tokenizer.Replace(context.Properties["MessageBody"], context.Tokens),
-                Url = _tokenizer.Replace(context.Properties["MessageUrl"], context.Tokens),
-                UrlTitle = _tokenizer.Replace(context.Properties["MessageUrlTitle"], context.Tokens)
-            };
             try {
+                // Default to normal priority
+                var priority = MessagePriority.Normal;
+                if (context.Properties.ContainsKey("Priority"))
+                    priority = context.Properties["Priority"] == "High"
+                                   ? MessagePriority.High
+                                   : MessagePriority.Normal;
+
+                // Default to current DateTime
+                DateTime timestamp;
+                if (!context.Properties.ContainsKey("Timestamp")
+                    || !DateTime.TryParse(_tokenizer.Replace(context.Properties["Timestamp"], context.Tokens), out timestamp))
+                    timestamp = DateTime.Now;
+
+                var message = new PushoverMessageBase
+                {
+                    User = _tokenizer.Replace(context.Properties["PushoverUser"], context.Tokens),
+                    Title = _tokenizer.Replace(context.Properties["MessageTitle"], context.Tokens),
+                    Message = _tokenizer.Replace(context.Properties["MessageBody"], context.Tokens),
+                    Url = _tokenizer.Replace(context.Properties["MessageUrl"], context.Tokens),
+                    UrlTitle = _tokenizer.Replace(context.Properties["MessageUrlTitle"], context.Tokens),
+                    Priority = priority,
+                    Timestamp = timestamp
+                };
+
                 _pushover.Push(message);
             }
             catch (Exception e) {
