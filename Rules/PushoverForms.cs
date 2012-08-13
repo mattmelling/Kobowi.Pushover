@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Kobowi.Pushover.Services;
 using Orchard.DisplayManagement;
 using Orchard.Forms.Services;
 using Orchard.Localization;
@@ -8,11 +9,13 @@ namespace Kobowi.Pushover.Rules {
     public class PushoverForms : IFormProvider {
 
         private readonly dynamic _shape;
+        private readonly IPushoverService _pushover;
 
         public Localizer T { get; set; }
 
-        public PushoverForms(IShapeFactory shapeFactory) {
+        public PushoverForms(IShapeFactory shapeFactory, IPushoverService pushover) {
             _shape = shapeFactory;
+            _pushover = pushover;
             T = NullLocalizer.Instance;
         }
 
@@ -21,10 +24,14 @@ namespace Kobowi.Pushover.Rules {
         public void Describe(DescribeContext context) {
             var form = _shape.Form(
                 Id: "PushoverMessageSettings",
+                _UserSelect: _shape.SelectList(
+                    Id: "UserSelect", Name: "UserSelect",
+                    Title: T("Select a User...")
+                ),
                 _User: _shape.TextBox(
                     Id: "PushoverUser", Name: "PushoverUser",
                     Size: 255, Rows: 1,
-                    Title: T("Pushover user key"),
+                    Title: T("... or enter a Pushover user key"),
                     Classes: new[] {"tokenized"}),
                 _Title: _shape.TextBox(
                     Id: "MessageTitle", Name: "MessageTitle",
@@ -56,12 +63,15 @@ namespace Kobowi.Pushover.Rules {
                     Classes: new[] {"tokenized"})
                 );
 
-            form._Priority.Add(new SelectListItem {Value = MessagePriority.Normal.ToString(), Text = "Normal"});
-            form._Priority.Add(new SelectListItem { Value = MessagePriority.High.ToString(), Text = "High" });
+            form._Priority.Add(new SelectListItem {Value = MessagePriority.Normal.ToString(), Text = T("Normal").Text});
+            form._Priority.Add(new SelectListItem {Value = MessagePriority.High.ToString(), Text = T("High").Text});
+
+            form._UserSelect.Add(new SelectListItem {Value = "", Text = T("None").Text});
+            foreach (var user in _pushover.GetPushoverUsers())
+                form._UserSelect.Add(new SelectListItem {Value = user.UserKey, Text = user.DisplayText});
 
             context.Form("PushoverMessageSettings",
                          shape => form);
-
         }
 
         #endregion

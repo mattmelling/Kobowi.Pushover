@@ -2,4 +2,7 @@
   <Match ContentType="Site">
     <Place Parts_PushoverSettingsPart_Edit="Content:25"/>
   </Match>
+  <Match ContentType="User">
+    <Place Parts_PushoverUserPart_Edit="Content:10" />
+  </Match>
 </Placement>

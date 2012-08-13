@@ -48,9 +48,10 @@ namespace Kobowi.Pushover.Rules
                     || !DateTime.TryParse(_tokenizer.Replace(context.Properties["Timestamp"], context.Tokens), out timestamp))
                     timestamp = DateTime.Now;
 
-                var message = new PushoverMessageBase
-                {
-                    User = _tokenizer.Replace(context.Properties["PushoverUser"], context.Tokens),
+                var message = new PushoverMessageBase {
+                    User = string.IsNullOrEmpty(context.Properties["PushoverUser"])
+                               ? context.Properties["UserSelect"]
+                               : _tokenizer.Replace(context.Properties["PushoverUser"], context.Tokens),
                     Title = _tokenizer.Replace(context.Properties["MessageTitle"], context.Tokens),
                     Message = _tokenizer.Replace(context.Properties["MessageBody"], context.Tokens),
                     Url = _tokenizer.Replace(context.Properties["MessageUrl"], context.Tokens),

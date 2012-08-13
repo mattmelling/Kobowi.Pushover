@@ -1,0 +1,7 @@
+﻿@model Kobowi.Pushover.ViewModels.PushoverUserPartEditor
+<fieldset>
+    <legend>@T("Pushover User Settings")</legend>
+    @Html.LabelFor(m => m.UserKey, T("User Key"))
+    @Html.TextBoxFor(m => m.UserKey)
+    <span class="hint">@T("You can find your key ") <a href="https://pushover.net/">@T("here")</a>.</span>
+</fieldset>

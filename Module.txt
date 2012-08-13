@@ -7,5 +7,6 @@ OrchardVersion: 1.4.0
 Description: Enables sending of Pushover notifications form an Orchard site.
 Features:
     Kobowi.Pushover:
+        Name: Pushover
         Description: Enables sending of Pushover notifications form an Orchard site.
-		Dependencies: Orchard.Rules, Orchard.Forms, Orchard.Tokens
+        Dependencies: Orchard.Rules, Orchard.Forms, Orchard.Tokens

@@ -12,5 +12,14 @@ namespace Kobowi.Pushover {
             ContentDefinitionManager.AlterPartDefinition(typeof (PushoverSettingsPart).Name, part => part.Attachable());
             return 1;
         }
+
+        public int UpdateFrom1() {
+            SchemaBuilder.CreateTable(typeof (PushoverUserPartRecord).Name,
+                                      table => table.ContentPartRecord()
+                                                   .Column<string>("UserKey"));
+            ContentDefinitionManager.AlterPartDefinition(typeof (PushoverUserPart).Name,
+                                                         part => part.Attachable());
+            return 2;
+        }
     }
 }
